@@ -1,0 +1,92 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ecommerce-dev
+
+resources:
+  - namespace.yaml
+  - ../../base/core
+  - ../../base/services
+
+configMapGenerator:
+  - name: ecommerce-config
+    namespace: ecommerce-dev
+    literals:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_ZIPKIN_BASE_URL=http://zipkin.ecommerce-dev.svc.cluster.local:9411
+      - SPRING_ZIPKIN_ENABLED=true
+      - MANAGEMENT_TRACING_SAMPLING_PROBABILITY=1.0
+      - LOGGING_LEVEL_ROOT=INFO
+      - MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE=health,info,metrics,prometheus
+      - MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED=true
+      - MANAGEMENT_HEALTH_LIVENESSSTATE_ENABLED=true
+      - MANAGEMENT_HEALTH_READINESSSTATE_ENABLED=true
+      - EUREKA_CLIENT_REGION=default
+      - EUREKA_CLIENT_AVAILABILITYZONES_DEFAULT=myzone
+      - EUREKA_CLIENT_SERVICEURL_MYZONE=http://service-discovery.ecommerce-dev.svc.cluster.local:8761/eureka
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery.ecommerce-dev.svc.cluster.local:8761/eureka/
+      - EUREKA_CLIENT_ENABLED=true
+      - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://cloud-config.ecommerce-dev.svc.cluster.local:9296/
+      - JAVA_TOOL_OPTIONS=-XX:MaxRAMPercentage=40 -Xms128m -Xmx256m
+
+commonLabels:
+  environment: dev
+
+# Image transformations will be applied by build script
+# ACR image pattern: acrvingesoftdev.azurecr.io/{service-name}:dev
+images:
+  - name: selimhorri/cloud-config-ecommerce-boot
+    newName: acrvingesoftdev.azurecr.io/cloud-config
+    newTag: dev
+  - name: selimhorri/service-discovery-ecommerce-boot
+    newName: acrvingesoftdev.azurecr.io/service-discovery
+    newTag: dev
+  - name: selimhorri/api-gateway-ecommerce-boot
+    newName: acrvingesoftdev.azurecr.io/api-gateway
+    newTag: dev
+  - name: selimhorri/order-service-ecommerce-boot
+    newName: acrvingesoftdev.azurecr.io/order-service
+    newTag: dev
+  - name: selimhorri/payment-service-ecommerce-boot
+    newName: acrvingesoftdev.azurecr.io/payment-service
+    newTag: dev
+  - name: selimhorri/product-service-ecommerce-boot
+    newName: acrvingesoftdev.azurecr.io/product-service
+    newTag: dev
+  - name: selimhorri/shipping-service-ecommerce-boot
+    newName: acrvingesoftdev.azurecr.io/shipping-service
+    newTag: dev
+  - name: selimhorri/user-service-ecommerce-boot
+    newName: acrvingesoftdev.azurecr.io/user-service
+    newTag: dev
+  - name: selimhorri/favourite-service-ecommerce-boot
+    newName: acrvingesoftdev.azurecr.io/favourite-service
+    newTag: dev
+  - name: selimhorri/proxy-client-ecommerce-boot
+    newName: acrvingesoftdev.azurecr.io/proxy-client
+    newTag: dev
+
+replicas:
+  - name: zipkin
+    count: 1
+  - name: service-discovery
+    count: 1
+  - name: cloud-config
+    count: 1
+  - name: api-gateway
+    count: 1
+  - name: order-service
+    count: 1
+  - name: payment-service
+    count: 1
+  - name: product-service
+    count: 1
+  - name: shipping-service
+    count: 1
+  - name: user-service
+    count: 1
+  - name: favourite-service
+    count: 1
+  - name: proxy-client
+    count: 1
