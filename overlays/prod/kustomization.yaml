@@ -1,0 +1,92 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ecommerce-prod
+
+resources:
+  - namespace.yaml
+  - ../../base/core
+  - ../../base/services
+
+configMapGenerator:
+  - name: ecommerce-config
+    namespace: ecommerce-prod
+    literals:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_ZIPKIN_BASE_URL=http://zipkin.ecommerce-prod.svc.cluster.local:9411
+      - SPRING_ZIPKIN_ENABLED=true
+      - MANAGEMENT_TRACING_SAMPLING_PROBABILITY=0.1
+      - LOGGING_LEVEL_ROOT=WARN
+      - MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE=health,info,metrics,prometheus
+      - MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED=true
+      - MANAGEMENT_HEALTH_LIVENESSSTATE_ENABLED=true
+      - MANAGEMENT_HEALTH_READINESSSTATE_ENABLED=true
+      - EUREKA_CLIENT_REGION=default
+      - EUREKA_CLIENT_AVAILABILITYZONES_DEFAULT=myzone
+      - EUREKA_CLIENT_SERVICEURL_MYZONE=http://service-discovery.ecommerce-prod.svc.cluster.local:8761/eureka
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery.ecommerce-prod.svc.cluster.local:8761/eureka/
+      - EUREKA_CLIENT_ENABLED=true
+      - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://cloud-config.ecommerce-prod.svc.cluster.local:9296/
+      - JAVA_TOOL_OPTIONS=-XX:MaxRAMPercentage=60 -Xms256m -Xmx512m
+
+commonLabels:
+  environment: prod
+
+# Image transformations - production uses Standard ACR
+images:
+  - name: selimhorri/cloud-config-ecommerce-boot
+    newName: acrvingesoftprod.azurecr.io/cloud-config
+    newTag: prod
+  - name: selimhorri/service-discovery-ecommerce-boot
+    newName: acrvingesoftprod.azurecr.io/service-discovery
+    newTag: prod
+  - name: selimhorri/api-gateway-ecommerce-boot
+    newName: acrvingesoftprod.azurecr.io/api-gateway
+    newTag: prod
+  - name: selimhorri/order-service-ecommerce-boot
+    newName: acrvingesoftprod.azurecr.io/order-service
+    newTag: prod
+  - name: selimhorri/payment-service-ecommerce-boot
+    newName: acrvingesoftprod.azurecr.io/payment-service
+    newTag: prod
+  - name: selimhorri/product-service-ecommerce-boot
+    newName: acrvingesoftprod.azurecr.io/product-service
+    newTag: prod
+  - name: selimhorri/shipping-service-ecommerce-boot
+    newName: acrvingesoftprod.azurecr.io/shipping-service
+    newTag: prod
+  - name: selimhorri/user-service-ecommerce-boot
+    newName: acrvingesoftprod.azurecr.io/user-service
+    newTag: prod
+  - name: selimhorri/favourite-service-ecommerce-boot
+    newName: acrvingesoftprod.azurecr.io/favourite-service
+    newTag: prod
+  - name: selimhorri/proxy-client-ecommerce-boot
+    newName: acrvingesoftprod.azurecr.io/proxy-client
+    newTag: prod
+
+# Production uses more replicas for HA
+replicas:
+  - name: zipkin
+    count: 2
+  - name: service-discovery
+    count: 2
+  - name: cloud-config
+    count: 2
+  - name: api-gateway
+    count: 2
+  - name: order-service
+    count: 2
+  - name: payment-service
+    count: 2
+  - name: product-service
+    count: 2
+  - name: shipping-service
+    count: 2
+  - name: user-service
+    count: 2
+  - name: favourite-service
+    count: 2
+  - name: proxy-client
+    count: 2
