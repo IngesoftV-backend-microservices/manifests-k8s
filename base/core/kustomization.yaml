@@ -5,6 +5,7 @@ resources:
   - zipkin-deployment.yaml
   - service-discovery-deployment.yaml
   - cloud-config-deployment.yaml
+  - sonarqube-deployment.yaml
 
 commonLabels:
   app.kubernetes.io/part-of: ecommerce-microservices
