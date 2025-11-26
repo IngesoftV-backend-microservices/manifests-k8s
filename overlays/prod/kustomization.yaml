@@ -74,6 +74,10 @@ replicas:
     count: 2
   - name: cloud-config
     count: 2
+  - name: sonarqube
+    count: 1
+  - name: sonarqube-postgres
+    count: 1
   - name: api-gateway
     count: 2
   - name: order-service
