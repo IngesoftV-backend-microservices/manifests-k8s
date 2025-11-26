@@ -5,6 +5,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+  storageClassName: managed-csi
   resources:
     requests:
       storage: 5Gi
@@ -16,6 +17,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+  storageClassName: managed-csi
   resources:
     requests:
       storage: 2Gi
@@ -27,6 +29,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+  storageClassName: managed-csi
   resources:
     requests:
       storage: 1Gi
@@ -38,6 +41,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+  storageClassName: managed-csi
   resources:
     requests:
       storage: 3Gi
@@ -77,6 +81,9 @@ spec:
         image: postgres:13-alpine
         ports:
         - containerPort: 5432
+        env:
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
         envFrom:
         - configMapRef:
             name: sonarqube-postgres-config
