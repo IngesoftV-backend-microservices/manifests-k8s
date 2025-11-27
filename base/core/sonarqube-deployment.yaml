@@ -185,16 +185,18 @@ spec:
           httpGet:
             path: /api/system/status
             port: 9000
-          initialDelaySeconds: 120
+          initialDelaySeconds: 300
           periodSeconds: 30
           timeoutSeconds: 10
+          failureThreshold: 10
         readinessProbe:
           httpGet:
             path: /api/system/status
             port: 9000
-          initialDelaySeconds: 60
-          periodSeconds: 10
-          timeoutSeconds: 5
+          initialDelaySeconds: 180
+          periodSeconds: 15
+          timeoutSeconds: 10
+          failureThreshold: 20
         volumeMounts:
         - name: sonarqube-data
           mountPath: /opt/sonarqube/data
@@ -204,11 +206,11 @@ spec:
           mountPath: /opt/sonarqube/logs
         resources:
           requests:
-            memory: "1Gi"
-            cpu: "500m"
+            memory: "768Mi"
+            cpu: "300m"
           limits:
-            memory: "2Gi"
-            cpu: "1000m"
+            memory: "1280Mi"
+            cpu: "600m"
       volumes:
       - name: sonarqube-data
         persistentVolumeClaim:
