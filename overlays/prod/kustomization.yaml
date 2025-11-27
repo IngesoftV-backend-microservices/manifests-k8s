@@ -37,34 +37,34 @@ commonLabels:
 # Image transformations - production uses Standard ACR
 images:
   - name: selimhorri/cloud-config-ecommerce-boot
-    newName: acrvingesofttaller2prod.azurecr.io/cloud-config
+    newName: acrvingesoftprod.azurecr.io/cloud-config
     newTag: prod
   - name: selimhorri/service-discovery-ecommerce-boot
-    newName: acrvingesofttaller2prod.azurecr.io/service-discovery
+    newName: acrvingesoftprod.azurecr.io/service-discovery
     newTag: prod
   - name: selimhorri/api-gateway-ecommerce-boot
-    newName: acrvingesofttaller2prod.azurecr.io/api-gateway
+    newName: acrvingesoftprod.azurecr.io/api-gateway
     newTag: prod
   - name: selimhorri/order-service-ecommerce-boot
-    newName: acrvingesofttaller2prod.azurecr.io/order-service
+    newName: acrvingesoftprod.azurecr.io/order-service
     newTag: prod
   - name: selimhorri/payment-service-ecommerce-boot
-    newName: acrvingesofttaller2prod.azurecr.io/payment-service
+    newName: acrvingesoftprod.azurecr.io/payment-service
     newTag: prod
   - name: selimhorri/product-service-ecommerce-boot
-    newName: acrvingesofttaller2prod.azurecr.io/product-service
+    newName: acrvingesoftprod.azurecr.io/product-service
     newTag: prod
   - name: selimhorri/shipping-service-ecommerce-boot
-    newName: acrvingesofttaller2prod.azurecr.io/shipping-service
+    newName: acrvingesoftprod.azurecr.io/shipping-service
     newTag: prod
   - name: selimhorri/user-service-ecommerce-boot
-    newName: acrvingesofttaller2prod.azurecr.io/user-service
+    newName: acrvingesoftprod.azurecr.io/user-service
     newTag: prod
   - name: selimhorri/favourite-service-ecommerce-boot
-    newName: acrvingesofttaller2prod.azurecr.io/favourite-service
+    newName: acrvingesoftprod.azurecr.io/favourite-service
     newTag: prod
   - name: selimhorri/proxy-client-ecommerce-boot
-    newName: acrvingesofttaller2prod.azurecr.io/proxy-client
+    newName: acrvingesoftprod.azurecr.io/proxy-client
     newTag: prod
 
 # Production uses more replicas for HA
