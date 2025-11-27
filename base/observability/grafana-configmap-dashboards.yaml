@@ -1248,4 +1248,708 @@ data:
       "uid": "product-service",
       "version": 1
     }
+  user-service.json: |
+    {
+      "annotations": {"list": []},
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": null,
+      "links": [],
+      "panels": [
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never",
+                "spanNulls": false
+              },
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+              "unit": "reqps"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+          "id": 1,
+          "options": {
+            "legend": {"calcs": [], "displayMode": "list", "placement": "bottom"},
+            "tooltip": {"mode": "single"}
+          },
+          "targets": [{
+            "expr": "sum(rate(http_server_requests_seconds_count{namespace=\"ecommerce-dev\",pod=~\"user-service.*\"}[5m]))",
+            "legendFormat": "User Service RPS",
+            "refId": "A"
+          }],
+          "title": "Requests por Segundo",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never",
+                "spanNulls": false
+              },
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+              "unit": "s"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+          "id": 2,
+          "options": {
+            "legend": {"calcs": [], "displayMode": "list", "placement": "bottom"},
+            "tooltip": {"mode": "single"}
+          },
+          "targets": [{
+            "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{namespace=\"ecommerce-dev\",pod=~\"user-service.*\"}[5m])) by (le))",
+            "legendFormat": "p95 Latency",
+            "refId": "A"
+          }],
+          "title": "Latencia p95",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never",
+                "spanNulls": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "red", "value": 0.1}
+                ]
+              },
+              "unit": "reqps"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+          "id": 3,
+          "options": {
+            "legend": {"calcs": [], "displayMode": "list", "placement": "bottom"},
+            "tooltip": {"mode": "single"}
+          },
+          "targets": [{
+            "expr": "sum(rate(http_server_requests_seconds_count{namespace=\"ecommerce-dev\",pod=~\"user-service.*\",status=~\"5..\"}[5m]))",
+            "legendFormat": "5xx Errors",
+            "refId": "A"
+          }],
+          "title": "Errores HTTP 5xx",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never",
+                "spanNulls": false
+              },
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+              "unit": "mbytes"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+          "id": 4,
+          "options": {
+            "legend": {"calcs": [], "displayMode": "list", "placement": "bottom"},
+            "tooltip": {"mode": "single"}
+          },
+          "targets": [{
+            "expr": "jvm_memory_used_bytes{namespace=\"ecommerce-dev\",pod=~\"user-service.*\"} / 1024 / 1024",
+            "legendFormat": "Memory Used",
+            "refId": "A"
+          }],
+          "title": "Memoria Usada (MB)",
+          "type": "timeseries"
+        }
+      ],
+      "refresh": "30s",
+      "schemaVersion": 27,
+      "style": "dark",
+      "tags": ["ecommerce", "user-service"],
+      "templating": {"list": []},
+      "time": {"from": "now-1h", "to": "now"},
+      "timepicker": {},
+      "timezone": "",
+      "title": "User Service - Métricas",
+      "uid": "user-service",
+      "version": 1
+    }
+  shipping-service.json: |
+    {
+      "annotations": {"list": []},
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": null,
+      "links": [],
+      "panels": [
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never",
+                "spanNulls": false
+              },
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+              "unit": "reqps"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+          "id": 1,
+          "options": {
+            "legend": {"calcs": [], "displayMode": "list", "placement": "bottom"},
+            "tooltip": {"mode": "single"}
+          },
+          "targets": [{
+            "expr": "sum(rate(http_server_requests_seconds_count{namespace=\"ecommerce-dev\",pod=~\"shipping-service.*\"}[5m]))",
+            "legendFormat": "Shipping Service RPS",
+            "refId": "A"
+          }],
+          "title": "Requests por Segundo",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never",
+                "spanNulls": false
+              },
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+              "unit": "s"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+          "id": 2,
+          "options": {
+            "legend": {"calcs": [], "displayMode": "list", "placement": "bottom"},
+            "tooltip": {"mode": "single"}
+          },
+          "targets": [{
+            "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{namespace=\"ecommerce-dev\",pod=~\"shipping-service.*\"}[5m])) by (le))",
+            "legendFormat": "p95 Latency",
+            "refId": "A"
+          }],
+          "title": "Latencia p95",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never",
+                "spanNulls": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "red", "value": 0.1}
+                ]
+              },
+              "unit": "reqps"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+          "id": 3,
+          "options": {
+            "legend": {"calcs": [], "displayMode": "list", "placement": "bottom"},
+            "tooltip": {"mode": "single"}
+          },
+          "targets": [{
+            "expr": "sum(rate(http_server_requests_seconds_count{namespace=\"ecommerce-dev\",pod=~\"shipping-service.*\",status=~\"5..\"}[5m]))",
+            "legendFormat": "5xx Errors",
+            "refId": "A"
+          }],
+          "title": "Errores HTTP 5xx",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never",
+                "spanNulls": false
+              },
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+              "unit": "mbytes"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+          "id": 4,
+          "options": {
+            "legend": {"calcs": [], "displayMode": "list", "placement": "bottom"},
+            "tooltip": {"mode": "single"}
+          },
+          "targets": [{
+            "expr": "jvm_memory_used_bytes{namespace=\"ecommerce-dev\",pod=~\"shipping-service.*\"} / 1024 / 1024",
+            "legendFormat": "Memory Used",
+            "refId": "A"
+          }],
+          "title": "Memoria Usada (MB)",
+          "type": "timeseries"
+        }
+      ],
+      "refresh": "30s",
+      "schemaVersion": 27,
+      "style": "dark",
+      "tags": ["ecommerce", "shipping-service"],
+      "templating": {"list": []},
+      "time": {"from": "now-1h", "to": "now"},
+      "timepicker": {},
+      "timezone": "",
+      "title": "Shipping Service - Métricas",
+      "uid": "shipping-service",
+      "version": 1
+    }
+  favourite-service.json: |
+    {
+      "annotations": {"list": []},
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": null,
+      "links": [],
+      "panels": [
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never",
+                "spanNulls": false
+              },
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+              "unit": "reqps"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+          "id": 1,
+          "options": {
+            "legend": {"calcs": [], "displayMode": "list", "placement": "bottom"},
+            "tooltip": {"mode": "single"}
+          },
+          "targets": [{
+            "expr": "sum(rate(http_server_requests_seconds_count{namespace=\"ecommerce-dev\",pod=~\"favourite-service.*\"}[5m]))",
+            "legendFormat": "Favourite Service RPS",
+            "refId": "A"
+          }],
+          "title": "Requests por Segundo",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never",
+                "spanNulls": false
+              },
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+              "unit": "s"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+          "id": 2,
+          "options": {
+            "legend": {"calcs": [], "displayMode": "list", "placement": "bottom"},
+            "tooltip": {"mode": "single"}
+          },
+          "targets": [{
+            "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{namespace=\"ecommerce-dev\",pod=~\"favourite-service.*\"}[5m])) by (le))",
+            "legendFormat": "p95 Latency",
+            "refId": "A"
+          }],
+          "title": "Latencia p95",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never",
+                "spanNulls": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "red", "value": 0.1}
+                ]
+              },
+              "unit": "reqps"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+          "id": 3,
+          "options": {
+            "legend": {"calcs": [], "displayMode": "list", "placement": "bottom"},
+            "tooltip": {"mode": "single"}
+          },
+          "targets": [{
+            "expr": "sum(rate(http_server_requests_seconds_count{namespace=\"ecommerce-dev\",pod=~\"favourite-service.*\",status=~\"5..\"}[5m]))",
+            "legendFormat": "5xx Errors",
+            "refId": "A"
+          }],
+          "title": "Errores HTTP 5xx",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never",
+                "spanNulls": false
+              },
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+              "unit": "mbytes"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+          "id": 4,
+          "options": {
+            "legend": {"calcs": [], "displayMode": "list", "placement": "bottom"},
+            "tooltip": {"mode": "single"}
+          },
+          "targets": [{
+            "expr": "jvm_memory_used_bytes{namespace=\"ecommerce-dev\",pod=~\"favourite-service.*\"} / 1024 / 1024",
+            "legendFormat": "Memory Used",
+            "refId": "A"
+          }],
+          "title": "Memoria Usada (MB)",
+          "type": "timeseries"
+        }
+      ],
+      "refresh": "30s",
+      "schemaVersion": 27,
+      "style": "dark",
+      "tags": ["ecommerce", "favourite-service"],
+      "templating": {"list": []},
+      "time": {"from": "now-1h", "to": "now"},
+      "timepicker": {},
+      "timezone": "",
+      "title": "Favourite Service - Métricas",
+      "uid": "favourite-service",
+      "version": 1
+    }
+  proxy-client.json: |
+    {
+      "annotations": {"list": []},
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": null,
+      "links": [],
+      "panels": [
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never",
+                "spanNulls": false
+              },
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+              "unit": "reqps"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+          "id": 1,
+          "options": {
+            "legend": {"calcs": [], "displayMode": "list", "placement": "bottom"},
+            "tooltip": {"mode": "single"}
+          },
+          "targets": [{
+            "expr": "sum(rate(http_server_requests_seconds_count{namespace=\"ecommerce-dev\",pod=~\"proxy-client.*\"}[5m]))",
+            "legendFormat": "Proxy Client RPS",
+            "refId": "A"
+          }],
+          "title": "Requests por Segundo",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never",
+                "spanNulls": false
+              },
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+              "unit": "s"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+          "id": 2,
+          "options": {
+            "legend": {"calcs": [], "displayMode": "list", "placement": "bottom"},
+            "tooltip": {"mode": "single"}
+          },
+          "targets": [{
+            "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{namespace=\"ecommerce-dev\",pod=~\"proxy-client.*\"}[5m])) by (le))",
+            "legendFormat": "p95 Latency",
+            "refId": "A"
+          }],
+          "title": "Latencia p95",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never",
+                "spanNulls": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "red", "value": 0.1}
+                ]
+              },
+              "unit": "reqps"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+          "id": 3,
+          "options": {
+            "legend": {"calcs": [], "displayMode": "list", "placement": "bottom"},
+            "tooltip": {"mode": "single"}
+          },
+          "targets": [{
+            "expr": "sum(rate(http_server_requests_seconds_count{namespace=\"ecommerce-dev\",pod=~\"proxy-client.*\",status=~\"5..\"}[5m]))",
+            "legendFormat": "5xx Errors",
+            "refId": "A"
+          }],
+          "title": "Errores HTTP 5xx",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "showPoints": "never",
+                "spanNulls": false
+              },
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+              "unit": "mbytes"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+          "id": 4,
+          "options": {
+            "legend": {"calcs": [], "displayMode": "list", "placement": "bottom"},
+            "tooltip": {"mode": "single"}
+          },
+          "targets": [{
+            "expr": "jvm_memory_used_bytes{namespace=\"ecommerce-dev\",pod=~\"proxy-client.*\"} / 1024 / 1024",
+            "legendFormat": "Memory Used",
+            "refId": "A"
+          }],
+          "title": "Memoria Usada (MB)",
+          "type": "timeseries"
+        }
+      ],
+      "refresh": "30s",
+      "schemaVersion": 27,
+      "style": "dark",
+      "tags": ["ecommerce", "proxy-client"],
+      "templating": {"list": []},
+      "time": {"from": "now-1h", "to": "now"},
+      "timepicker": {},
+      "timezone": "",
+      "title": "Proxy Client - Métricas",
+      "uid": "proxy-client",
+      "version": 1
+    }
 
