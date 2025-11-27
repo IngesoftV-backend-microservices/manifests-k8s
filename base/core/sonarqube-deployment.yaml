@@ -206,11 +206,11 @@ spec:
           mountPath: /opt/sonarqube/logs
         resources:
           requests:
-            memory: "768Mi"
+            memory: "1Gi"
             cpu: "300m"
           limits:
-            memory: "1280Mi"
-            cpu: "600m"
+            memory: "2Gi"
+            cpu: "800m"
       volumes:
       - name: sonarqube-data
         persistentVolumeClaim:
