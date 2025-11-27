@@ -224,12 +224,12 @@ data:
           },
           "targets": [
             {
-              "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{namespace=\"ecommerce-dev\"}[5m])) by (le, pod))",
-              "legendFormat": "{{pod}}",
+            "expr": "sum(rate(http_server_requests_seconds_sum{namespace=\"ecommerce-dev\"}[5m])) by (pod) / sum(rate(http_server_requests_seconds_count{namespace=\"ecommerce-dev\"}[5m])) by (pod)",
+            "legendFormat": "{{pod}}",
               "refId": "A"
             }
           ],
-          "title": "Latencia p95 por Servicio",
+          "title": "Latencia Promedio por Servicio",
           "type": "timeseries"
         },
         {
@@ -364,8 +364,8 @@ data:
           },
           "targets": [
             {
-              "expr": "jvm_memory_used_bytes{namespace=\"ecommerce-dev\"} / 1024 / 1024",
-              "legendFormat": "{{pod}}",
+            "expr": "sum(jvm_memory_used_bytes{namespace=\"ecommerce-dev\"}) by (pod) / 1024 / 1024",
+            "legendFormat": "{{pod}}",
               "refId": "A"
             }
           ],
@@ -546,11 +546,11 @@ data:
             "tooltip": {"mode": "single"}
           },
           "targets": [{
-            "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{namespace=\"ecommerce-dev\",pod=~\"api-gateway.*\"}[5m])) by (le))",
-            "legendFormat": "p95 Latency",
+            "expr": "sum(rate(http_server_requests_seconds_sum{namespace=\"ecommerce-dev\",pod=~\"api-gateway.*\"}[5m])) / sum(rate(http_server_requests_seconds_count{namespace=\"ecommerce-dev\",pod=~\"api-gateway.*\"}[5m]))",
+            "legendFormat": "Average Latency",
             "refId": "A"
           }],
-          "title": "Latencia p95",
+          "title": "Latencia Promedio",
           "type": "timeseries"
         },
         {
@@ -761,11 +761,11 @@ data:
             "tooltip": {"mode": "single"}
           },
           "targets": [{
-            "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{namespace=\"ecommerce-dev\",pod=~\"order-service.*\"}[5m])) by (le))",
-            "legendFormat": "p95 Latency",
+            "expr": "sum(rate(http_server_requests_seconds_sum{namespace=\"ecommerce-dev\",pod=~\"order-service.*\"}[5m])) / sum(rate(http_server_requests_seconds_count{namespace=\"ecommerce-dev\",pod=~\"order-service.*\"}[5m]))",
+            "legendFormat": "Average Latency",
             "refId": "A"
           }],
-          "title": "Latencia p95",
+          "title": "Latencia Promedio",
           "type": "timeseries"
         },
         {
@@ -841,12 +841,47 @@ data:
             "tooltip": {"mode": "single"}
           },
           "targets": [{
-            "expr": "jvm_memory_used_bytes{namespace=\"ecommerce-dev\",pod=~\"order-service.*\"} / 1024 / 1024",
-            "legendFormat": "Memory Used",
+            "expr": "sum(jvm_memory_used_bytes{namespace=\"ecommerce-dev\",pod=~\"order-service.*\"}) by (pod) / 1024 / 1024",
+            "legendFormat": "{{pod}}",
             "refId": "A"
           }],
           "title": "Memoria Usada (MB)",
           "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "yellow", "value": 70},
+                  {"color": "red", "value": 90}
+                ]
+              },
+              "unit": "percent"
+            }
+          },
+          "gridPos": {"h": 4, "w": 12, "x": 0, "y": 16},
+          "id": 5,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "textMode": "auto"
+          },
+          "targets": [{
+            "expr": "process_cpu_usage{namespace=\"ecommerce-dev\",pod=~\"order-service.*\"} * 100",
+            "legendFormat": "CPU Usage",
+            "refId": "A"
+          }],
+          "title": "CPU Usage (%)",
+          "type": "stat"
         }
       ],
       "refresh": "30s",
@@ -937,11 +972,11 @@ data:
             "tooltip": {"mode": "single"}
           },
           "targets": [{
-            "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{namespace=\"ecommerce-dev\",pod=~\"payment-service.*\"}[5m])) by (le))",
-            "legendFormat": "p95 Latency",
+            "expr": "sum(rate(http_server_requests_seconds_sum{namespace=\"ecommerce-dev\",pod=~\"payment-service.*\"}[5m])) / sum(rate(http_server_requests_seconds_count{namespace=\"ecommerce-dev\",pod=~\"payment-service.*\"}[5m]))",
+            "legendFormat": "Average Latency",
             "refId": "A"
           }],
-          "title": "Latencia p95",
+          "title": "Latencia Promedio",
           "type": "timeseries"
         },
         {
@@ -1052,12 +1087,47 @@ data:
             "tooltip": {"mode": "single"}
           },
           "targets": [{
-            "expr": "jvm_memory_used_bytes{namespace=\"ecommerce-dev\",pod=~\"payment-service.*\"} / 1024 / 1024",
-            "legendFormat": "Memory Used",
+            "expr": "sum(jvm_memory_used_bytes{namespace=\"ecommerce-dev\",pod=~\"payment-service.*\"}) by (pod) / 1024 / 1024",
+            "legendFormat": "{{pod}}",
             "refId": "A"
           }],
           "title": "Memoria Usada (MB)",
           "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "yellow", "value": 70},
+                  {"color": "red", "value": 90}
+                ]
+              },
+              "unit": "percent"
+            }
+          },
+          "gridPos": {"h": 4, "w": 12, "x": 0, "y": 16},
+          "id": 5,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "textMode": "auto"
+          },
+          "targets": [{
+            "expr": "process_cpu_usage{namespace=\"ecommerce-dev\",pod=~\"product-service.*\"} * 100",
+            "legendFormat": "CPU Usage",
+            "refId": "A"
+          }],
+          "title": "CPU Usage (%)",
+          "type": "stat"
         }
       ],
       "refresh": "30s",
@@ -1148,11 +1218,11 @@ data:
             "tooltip": {"mode": "single"}
           },
           "targets": [{
-            "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{namespace=\"ecommerce-dev\",pod=~\"product-service.*\"}[5m])) by (le))",
-            "legendFormat": "p95 Latency",
+            "expr": "sum(rate(http_server_requests_seconds_sum{namespace=\"ecommerce-dev\",pod=~\"product-service.*\"}[5m])) / sum(rate(http_server_requests_seconds_count{namespace=\"ecommerce-dev\",pod=~\"product-service.*\"}[5m]))",
+            "legendFormat": "Average Latency",
             "refId": "A"
           }],
-          "title": "Latencia p95",
+          "title": "Latencia Promedio",
           "type": "timeseries"
         },
         {
@@ -1228,12 +1298,47 @@ data:
             "tooltip": {"mode": "single"}
           },
           "targets": [{
-            "expr": "jvm_memory_used_bytes{namespace=\"ecommerce-dev\",pod=~\"product-service.*\"} / 1024 / 1024",
-            "legendFormat": "Memory Used",
+            "expr": "sum(jvm_memory_used_bytes{namespace=\"ecommerce-dev\",pod=~\"product-service.*\"}) by (pod) / 1024 / 1024",
+            "legendFormat": "{{pod}}",
             "refId": "A"
           }],
           "title": "Memoria Usada (MB)",
           "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "yellow", "value": 70},
+                  {"color": "red", "value": 90}
+                ]
+              },
+              "unit": "percent"
+            }
+          },
+          "gridPos": {"h": 4, "w": 12, "x": 0, "y": 16},
+          "id": 5,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "textMode": "auto"
+          },
+          "targets": [{
+            "expr": "process_cpu_usage{namespace=\"ecommerce-dev\",pod=~\"user-service.*\"} * 100",
+            "legendFormat": "CPU Usage",
+            "refId": "A"
+          }],
+          "title": "CPU Usage (%)",
+          "type": "stat"
         }
       ],
       "refresh": "30s",
@@ -1324,11 +1429,11 @@ data:
             "tooltip": {"mode": "single"}
           },
           "targets": [{
-            "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{namespace=\"ecommerce-dev\",pod=~\"user-service.*\"}[5m])) by (le))",
-            "legendFormat": "p95 Latency",
+            "expr": "sum(rate(http_server_requests_seconds_sum{namespace=\"ecommerce-dev\",pod=~\"user-service.*\"}[5m])) / sum(rate(http_server_requests_seconds_count{namespace=\"ecommerce-dev\",pod=~\"user-service.*\"}[5m]))",
+            "legendFormat": "Average Latency",
             "refId": "A"
           }],
-          "title": "Latencia p95",
+          "title": "Latencia Promedio",
           "type": "timeseries"
         },
         {
@@ -1404,12 +1509,47 @@ data:
             "tooltip": {"mode": "single"}
           },
           "targets": [{
-            "expr": "jvm_memory_used_bytes{namespace=\"ecommerce-dev\",pod=~\"user-service.*\"} / 1024 / 1024",
-            "legendFormat": "Memory Used",
+            "expr": "sum(jvm_memory_used_bytes{namespace=\"ecommerce-dev\",pod=~\"user-service.*\"}) by (pod) / 1024 / 1024",
+            "legendFormat": "{{pod}}",
             "refId": "A"
           }],
           "title": "Memoria Usada (MB)",
           "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "yellow", "value": 70},
+                  {"color": "red", "value": 90}
+                ]
+              },
+              "unit": "percent"
+            }
+          },
+          "gridPos": {"h": 4, "w": 12, "x": 0, "y": 16},
+          "id": 5,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "textMode": "auto"
+          },
+          "targets": [{
+            "expr": "process_cpu_usage{namespace=\"ecommerce-dev\",pod=~\"shipping-service.*\"} * 100",
+            "legendFormat": "CPU Usage",
+            "refId": "A"
+          }],
+          "title": "CPU Usage (%)",
+          "type": "stat"
         }
       ],
       "refresh": "30s",
@@ -1500,11 +1640,11 @@ data:
             "tooltip": {"mode": "single"}
           },
           "targets": [{
-            "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{namespace=\"ecommerce-dev\",pod=~\"shipping-service.*\"}[5m])) by (le))",
-            "legendFormat": "p95 Latency",
+            "expr": "sum(rate(http_server_requests_seconds_sum{namespace=\"ecommerce-dev\",pod=~\"shipping-service.*\"}[5m])) / sum(rate(http_server_requests_seconds_count{namespace=\"ecommerce-dev\",pod=~\"shipping-service.*\"}[5m]))",
+            "legendFormat": "Average Latency",
             "refId": "A"
           }],
-          "title": "Latencia p95",
+          "title": "Latencia Promedio",
           "type": "timeseries"
         },
         {
@@ -1580,12 +1720,47 @@ data:
             "tooltip": {"mode": "single"}
           },
           "targets": [{
-            "expr": "jvm_memory_used_bytes{namespace=\"ecommerce-dev\",pod=~\"shipping-service.*\"} / 1024 / 1024",
-            "legendFormat": "Memory Used",
+            "expr": "sum(jvm_memory_used_bytes{namespace=\"ecommerce-dev\",pod=~\"shipping-service.*\"}) by (pod) / 1024 / 1024",
+            "legendFormat": "{{pod}}",
             "refId": "A"
           }],
           "title": "Memoria Usada (MB)",
           "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "yellow", "value": 70},
+                  {"color": "red", "value": 90}
+                ]
+              },
+              "unit": "percent"
+            }
+          },
+          "gridPos": {"h": 4, "w": 12, "x": 0, "y": 16},
+          "id": 5,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "textMode": "auto"
+          },
+          "targets": [{
+            "expr": "process_cpu_usage{namespace=\"ecommerce-dev\",pod=~\"favourite-service.*\"} * 100",
+            "legendFormat": "CPU Usage",
+            "refId": "A"
+          }],
+          "title": "CPU Usage (%)",
+          "type": "stat"
         }
       ],
       "refresh": "30s",
@@ -1676,11 +1851,11 @@ data:
             "tooltip": {"mode": "single"}
           },
           "targets": [{
-            "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{namespace=\"ecommerce-dev\",pod=~\"favourite-service.*\"}[5m])) by (le))",
-            "legendFormat": "p95 Latency",
+            "expr": "sum(rate(http_server_requests_seconds_sum{namespace=\"ecommerce-dev\",pod=~\"favourite-service.*\"}[5m])) / sum(rate(http_server_requests_seconds_count{namespace=\"ecommerce-dev\",pod=~\"favourite-service.*\"}[5m]))",
+            "legendFormat": "Average Latency",
             "refId": "A"
           }],
-          "title": "Latencia p95",
+          "title": "Latencia Promedio",
           "type": "timeseries"
         },
         {
@@ -1756,12 +1931,47 @@ data:
             "tooltip": {"mode": "single"}
           },
           "targets": [{
-            "expr": "jvm_memory_used_bytes{namespace=\"ecommerce-dev\",pod=~\"favourite-service.*\"} / 1024 / 1024",
-            "legendFormat": "Memory Used",
+            "expr": "sum(jvm_memory_used_bytes{namespace=\"ecommerce-dev\",pod=~\"favourite-service.*\"}) by (pod) / 1024 / 1024",
+            "legendFormat": "{{pod}}",
             "refId": "A"
           }],
           "title": "Memoria Usada (MB)",
           "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "yellow", "value": 70},
+                  {"color": "red", "value": 90}
+                ]
+              },
+              "unit": "percent"
+            }
+          },
+          "gridPos": {"h": 4, "w": 12, "x": 0, "y": 16},
+          "id": 5,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "textMode": "auto"
+          },
+          "targets": [{
+            "expr": "process_cpu_usage{namespace=\"ecommerce-dev\",pod=~\"proxy-client.*\"} * 100",
+            "legendFormat": "CPU Usage",
+            "refId": "A"
+          }],
+          "title": "CPU Usage (%)",
+          "type": "stat"
         }
       ],
       "refresh": "30s",
@@ -1852,11 +2062,11 @@ data:
             "tooltip": {"mode": "single"}
           },
           "targets": [{
-            "expr": "histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{namespace=\"ecommerce-dev\",pod=~\"proxy-client.*\"}[5m])) by (le))",
-            "legendFormat": "p95 Latency",
+            "expr": "sum(rate(http_server_requests_seconds_sum{namespace=\"ecommerce-dev\",pod=~\"proxy-client.*\"}[5m])) / sum(rate(http_server_requests_seconds_count{namespace=\"ecommerce-dev\",pod=~\"proxy-client.*\"}[5m]))",
+            "legendFormat": "Average Latency",
             "refId": "A"
           }],
-          "title": "Latencia p95",
+          "title": "Latencia Promedio",
           "type": "timeseries"
         },
         {
@@ -1932,8 +2142,8 @@ data:
             "tooltip": {"mode": "single"}
           },
           "targets": [{
-            "expr": "jvm_memory_used_bytes{namespace=\"ecommerce-dev\",pod=~\"proxy-client.*\"} / 1024 / 1024",
-            "legendFormat": "Memory Used",
+            "expr": "sum(jvm_memory_used_bytes{namespace=\"ecommerce-dev\",pod=~\"proxy-client.*\"}) by (pod) / 1024 / 1024",
+            "legendFormat": "{{pod}}",
             "refId": "A"
           }],
           "title": "Memoria Usada (MB)",
