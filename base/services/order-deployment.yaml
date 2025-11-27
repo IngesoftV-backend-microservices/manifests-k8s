@@ -11,6 +11,10 @@ spec:
     metadata:
       labels:
         app: order-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /order-service/actuator/prometheus
+        prometheus.io/port: "8300"
     spec:
       containers:
       - name: order-service
@@ -29,7 +33,7 @@ spec:
         - name: LOGGING_LEVEL_ROOT
           value: "WARN"
         - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
-          value: "health,info"
+          value: "health,info,metrics,prometheus"
         - name: MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED
           value: "true"
         - name: MANAGEMENT_HEALTH_LIVENESSSTATE_ENABLED

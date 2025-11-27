@@ -11,10 +11,15 @@ spec:
     metadata:
       labels:
         app: user-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /user-service/actuator/prometheus
+        prometheus.io/port: "8700"
     spec:
       containers:
       - name: user-service
         image: selimhorri/user-service-ecommerce-boot:0.1.0
+        imagePullPolicy: Always
         ports:
         - containerPort: 8700
         env:
@@ -29,7 +34,7 @@ spec:
         - name: LOGGING_LEVEL_ROOT
           value: "WARN"
         - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
-          value: "health,info"
+          value: "health,info,metrics,prometheus"
         - name: MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED
           value: "true"
         - name: MANAGEMENT_HEALTH_LIVENESSSTATE_ENABLED

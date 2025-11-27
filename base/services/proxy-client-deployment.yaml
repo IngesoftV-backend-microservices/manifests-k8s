@@ -11,6 +11,10 @@ spec:
     metadata:
       labels:
         app: proxy-client
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /app/actuator/prometheus
+        prometheus.io/port: "8900"
     spec:
       containers:
       - name: proxy-client
@@ -29,7 +33,7 @@ spec:
         - name: LOGGING_LEVEL_ROOT
           value: "WARN"
         - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
-          value: "health,info"
+          value: "health,info,metrics,prometheus"
         - name: MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED
           value: "true"
         - name: MANAGEMENT_HEALTH_LIVENESSSTATE_ENABLED
