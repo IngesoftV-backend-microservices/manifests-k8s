@@ -4,7 +4,11 @@ kind: Kustomization
 resources:
   - prometheus-serviceaccount.yaml
   - prometheus-configmap.yaml
+  - prometheus-rules-configmap.yaml
   - prometheus-deployment.yaml
+  - alertmanager-configmap.yaml
+  - alertmanager-deployment.yaml
+  - alertmanager-webhook.yaml
   - grafana-secret.yaml
   - grafana-configmap-datasource.yaml
   - grafana-configmap-dashboards.yaml
