@@ -64,18 +64,26 @@ spec:
           periodSeconds: 10
           failureThreshold: 90
           timeoutSeconds: 5
-        # livenessProbe temporarily disabled to avoid restarts due to timing
-        readinessProbe:
-          tcpSocket:
+        livenessProbe:
+          httpGet:
+            path: /user-service/actuator/health/liveness
             port: 8700
-          initialDelaySeconds: 60
+          initialDelaySeconds: 180
+          periodSeconds: 45
+          failureThreshold: 4
+          timeoutSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /user-service/actuator/health/readiness
+            port: 8700
+          initialDelaySeconds: 90
           periodSeconds: 15
-          failureThreshold: 10
-          timeoutSeconds: 5
+          failureThreshold: 4
+          timeoutSeconds: 10
         resources:
           requests:
-            memory: "256Mi"
-            cpu: "100m"
+            memory: "128Mi"
+            cpu: "50m"
           limits:
             memory: "768Mi"
             cpu: "500m"
