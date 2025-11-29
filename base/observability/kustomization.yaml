@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - prometheus-serviceaccount.yaml
+  - prometheus-configmap.yaml
+  - prometheus-rules-configmap.yaml
+  - prometheus-deployment.yaml
+  - alertmanager-configmap.yaml
+  - alertmanager-deployment.yaml
+  - alertmanager-webhook.yaml
+  - grafana-secret.yaml
+  - grafana-configmap-datasource.yaml
+  - grafana-configmap-dashboards.yaml
+  - grafana-deployment.yaml
+  - elasticsearch-deployment.yaml
+  - kibana-deployment.yaml
+  - filebeat-daemonset.yaml
+
+commonLabels:
+  app.kubernetes.io/part-of: ecommerce-observability
+

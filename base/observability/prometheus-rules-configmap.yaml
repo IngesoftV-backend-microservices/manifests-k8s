@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-alert-rules
+data:
+  critical-alerts.yml: |
+    groups:
+      - name: ecommerce-critical.rules
+        rules:
+          - alert: HighHttp5xxErrorRate
+            expr: |
+              sum(rate(http_server_requests_seconds_count{namespace="ecommerce-dev",status=~"5.."}[5m]))
+              /
+              clamp_min(sum(rate(http_server_requests_seconds_count{namespace="ecommerce-dev"}[5m])), 1)
+              > 0.05
+            for: 2m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Más de 5% de solicitudes están fallando (5xx)"
+              description: "El ratio actual de respuestas 5xx es {{ $value | printf \"%.2f\" }}."
+
+          - alert: ApiGatewayHighLatency
+            expr: |
+              sum(rate(http_server_requests_seconds_sum{namespace="ecommerce-dev",pod=~"api-gateway.*"}[5m]))
+              /
+              clamp_min(sum(rate(http_server_requests_seconds_count{namespace="ecommerce-dev",pod=~"api-gateway.*"}[5m])), 1)
+              > 0.5
+            for: 2m
+            labels:
+              severity: warning
+            annotations:
+              summary: "Latencia alta en API Gateway (> 500 ms)"
+              description: "La latencia promedio del API Gateway superó los 500 ms ({{ $value }} s)."
+
+          - alert: ApiGatewayDown
+            expr: sum(up{namespace="ecommerce-dev",pod=~"api-gateway.*"}) == 0
+            for: 1m
+            labels:
+              severity: critical
+            annotations:
+              summary: "API Gateway no tiene pods activos"
+              description: "La métrica up() indica que no hay pods del API Gateway disponibles."
+

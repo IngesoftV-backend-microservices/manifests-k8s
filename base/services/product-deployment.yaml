@@ -11,10 +11,15 @@ spec:
     metadata:
       labels:
         app: product-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /product-service/actuator/prometheus
+        prometheus.io/port: "8500"
     spec:
       containers:
       - name: product-service
         image: selimhorri/product-service-ecommerce-boot:0.1.0
+        imagePullPolicy: Always
         ports:
         - containerPort: 8500
         env:
@@ -29,7 +34,7 @@ spec:
         - name: LOGGING_LEVEL_ROOT
           value: "WARN"
         - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
-          value: "health,info"
+          value: "health,info,metrics,prometheus"
         - name: MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED
           value: "true"
         - name: MANAGEMENT_HEALTH_LIVENESSSTATE_ENABLED
@@ -59,19 +64,26 @@ spec:
           periodSeconds: 10
           failureThreshold: 90
           timeoutSeconds: 5
-        # livenessProbe temporarily disabled to avoid restarts due to timing
+        livenessProbe:
+          httpGet:
+            path: /product-service/actuator/health/liveness
+            port: 8500
+          initialDelaySeconds: 180
+          periodSeconds: 45
+          failureThreshold: 4
+          timeoutSeconds: 10
         readinessProbe:
           httpGet:
             path: /product-service/actuator/health/readiness
             port: 8500
           initialDelaySeconds: 90
-          periodSeconds: 20
-          failureThreshold: 10
-          timeoutSeconds: 5
+          periodSeconds: 15
+          failureThreshold: 4
+          timeoutSeconds: 10
         resources:
           requests:
             memory: "128Mi"
-            cpu: "100m"
+            cpu: "50m"
           limits:
             memory: "400Mi"
             cpu: "500m"
