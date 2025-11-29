@@ -8,12 +8,6 @@ resources:
   - ../../base/core
   - ../../base/services
 
-patches:
-  - path: proxy-client-loadbalancer-patch.yaml
-    target:
-      kind: Service
-      name: proxy-client
-
 configMapGenerator:
   - name: ecommerce-config
     namespace: ecommerce-dev
