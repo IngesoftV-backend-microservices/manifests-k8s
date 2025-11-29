@@ -13,6 +13,9 @@ resources:
   - grafana-configmap-datasource.yaml
   - grafana-configmap-dashboards.yaml
   - grafana-deployment.yaml
+  - elasticsearch-deployment.yaml
+  - kibana-deployment.yaml
+  - filebeat-daemonset.yaml
 
 commonLabels:
   app.kubernetes.io/part-of: ecommerce-observability
