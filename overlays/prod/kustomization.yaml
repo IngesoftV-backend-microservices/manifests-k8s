@@ -7,6 +7,7 @@ resources:
   - namespace.yaml
   - ../../base/core
   - ../../base/services
+  - ../../base/observability
 
 configMapGenerator:
   - name: ecommerce-config
@@ -94,3 +95,6 @@ replicas:
     count: 2
   - name: proxy-client
     count: 2
+
+patchesStrategicMerge:
+  - prometheus-rbac-patch.yaml

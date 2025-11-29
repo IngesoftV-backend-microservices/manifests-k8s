@@ -11,6 +11,10 @@ spec:
     metadata:
       labels:
         app: order-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /order-service/actuator/prometheus
+        prometheus.io/port: "8300"
     spec:
       containers:
       - name: order-service
@@ -29,7 +33,7 @@ spec:
         - name: LOGGING_LEVEL_ROOT
           value: "WARN"
         - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
-          value: "health,info"
+          value: "health,info,metrics,prometheus"
         - name: MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED
           value: "true"
         - name: MANAGEMENT_HEALTH_LIVENESSSTATE_ENABLED
@@ -59,19 +63,26 @@ spec:
           periodSeconds: 10
           failureThreshold: 90
           timeoutSeconds: 5
-        # livenessProbe temporarily disabled to avoid restarts due to timing
+        livenessProbe:
+          httpGet:
+            path: /order-service/actuator/health/liveness
+            port: 8300
+          initialDelaySeconds: 180
+          periodSeconds: 45
+          failureThreshold: 4
+          timeoutSeconds: 10
         readinessProbe:
           httpGet:
             path: /order-service/actuator/health/readiness
             port: 8300
           initialDelaySeconds: 90
-          periodSeconds: 20
-          failureThreshold: 10
-          timeoutSeconds: 5
+          periodSeconds: 15
+          failureThreshold: 4
+          timeoutSeconds: 10
         resources:
           requests:
-            memory: "256Mi"
-            cpu: "100m"
+            memory: "128Mi"
+            cpu: "50m"
           limits:
             memory: "768Mi"
             cpu: "500m"
