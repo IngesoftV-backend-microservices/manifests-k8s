@@ -56,7 +56,7 @@ spec:
         - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
           value: "true"
         - name: JAVA_TOOL_OPTIONS
-          value: "-XX:MaxRAMPercentage=40 -Xms128m -Xmx256m"
+          value: "-XX:MaxRAMPercentage=40 -Xms128m -Xmx200m"
         startupProbe:
           httpGet:
             path: /payment-service/actuator/health
@@ -85,7 +85,7 @@ spec:
             memory: "128Mi"
             cpu: "50m"
           limits:
-            memory: "768Mi"
+            memory: "400Mi"
             cpu: "500m"
 ---
 apiVersion: v1
