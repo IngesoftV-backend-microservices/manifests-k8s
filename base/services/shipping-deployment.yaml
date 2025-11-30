@@ -16,6 +16,7 @@ spec:
         prometheus.io/path: /shipping-service/actuator/prometheus
         prometheus.io/port: "8600"
     spec:
+      serviceAccountName: shipping-service
       containers:
       - name: shipping-service
         image: selimhorri/shipping-service-ecommerce-boot:0.1.0

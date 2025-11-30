@@ -16,6 +16,7 @@ spec:
         prometheus.io/path: /payment-service/actuator/prometheus
         prometheus.io/port: "8400"
     spec:
+      serviceAccountName: payment-service
       containers:
       - name: payment-service
         image: selimhorri/payment-service-ecommerce-boot:0.1.0

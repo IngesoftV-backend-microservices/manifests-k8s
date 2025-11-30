@@ -16,6 +16,7 @@ spec:
         prometheus.io/path: /favourite-service/actuator/prometheus
         prometheus.io/port: "8800"
     spec:
+      serviceAccountName: favourite-service
       containers:
       - name: favourite-service
         image: selimhorri/favourite-service-ecommerce-boot:0.1.0

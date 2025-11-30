@@ -1,0 +1,32 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: microservice-rolebinding
+  labels:
+    app.kubernetes.io/component: rbac
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: microservice-role
+subjects:
+  - kind: ServiceAccount
+    name: api-gateway
+  - kind: ServiceAccount
+    name: user-service
+  - kind: ServiceAccount
+    name: order-service
+  - kind: ServiceAccount
+    name: payment-service
+  - kind: ServiceAccount
+    name: product-service
+  - kind: ServiceAccount
+    name: shipping-service
+  - kind: ServiceAccount
+    name: favourite-service
+  - kind: ServiceAccount
+    name: proxy-client
+  - kind: ServiceAccount
+    name: service-discovery
+  - kind: ServiceAccount
+    name: cloud-config
+

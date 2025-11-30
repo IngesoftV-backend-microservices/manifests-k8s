@@ -12,6 +12,7 @@ spec:
       labels:
         app: service-discovery
     spec:
+      serviceAccountName: service-discovery
       containers:
       - name: service-discovery
         image: selimhorri/service-discovery-ecommerce-boot:0.1.0

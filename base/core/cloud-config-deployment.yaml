@@ -14,6 +14,7 @@ spec:
       labels:
         app: cloud-config
     spec:
+      serviceAccountName: cloud-config
       containers:
       - name: cloud-config
         image: selimhorri/cloud-config-ecommerce-boot:0.1.0

@@ -16,6 +16,7 @@ spec:
         prometheus.io/path: /app/actuator/prometheus
         prometheus.io/port: "8900"
     spec:
+      serviceAccountName: proxy-client
       containers:
       - name: proxy-client
         image: selimhorri/proxy-client-ecommerce-boot:0.1.0

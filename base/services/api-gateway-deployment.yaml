@@ -16,6 +16,7 @@ spec:
         prometheus.io/path: /actuator/prometheus
         prometheus.io/port: "8080"
     spec:
+      serviceAccountName: api-gateway
       containers:
       - name: api-gateway
         image: selimhorri/api-gateway-ecommerce-boot:0.1.0
