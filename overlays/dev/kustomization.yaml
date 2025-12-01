@@ -8,6 +8,7 @@ resources:
   - ../../base/core
   - ../../base/services
   - ../../base/observability
+  - ../../base/finops
 
 configMapGenerator:
   - name: ecommerce-config
@@ -98,3 +99,4 @@ replicas:
 
 patchesStrategicMerge:
   - prometheus-rbac-patch.yaml
+  - spot-instance-patch.yaml

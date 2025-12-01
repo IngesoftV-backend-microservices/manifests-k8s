@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spot-instance-config
+  labels:
+    app.kubernetes.io/component: finops
+data:
+  tolerations.yaml: |
+    - key: "kubernetes.azure.com/scalesetpriority"
+      operator: "Equal"
+      value: "Spot"
+      effect: "NoSchedule"
+  node-selector.yaml: |
+    kubernetes.azure.com/scalesetpriority: "Spot"
+  annotations.yaml: |
+    cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+
