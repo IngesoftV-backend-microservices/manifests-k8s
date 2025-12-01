@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-service
+spec:
+  template:
+    spec:
+      tolerations:
+      - key: "kubernetes.azure.com/scalesetpriority"
+        operator: "Equal"
+        value: "Spot"
+        effect: "NoSchedule"
+      nodeSelector:
+        kubernetes.azure.com/scalesetpriority: "Spot"
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: kubernetes.azure.com/scalesetpriority
+                operator: In
+                values:
+                - Spot
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: favourite-service
+spec:
+  template:
+    spec:
+      tolerations:
+      - key: "kubernetes.azure.com/scalesetpriority"
+        operator: "Equal"
+        value: "Spot"
+        effect: "NoSchedule"
+      nodeSelector:
+        kubernetes.azure.com/scalesetpriority: "Spot"
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: kubernetes.azure.com/scalesetpriority
+                operator: In
+                values:
+                - Spot
+

@@ -2431,4 +2431,498 @@ data:
       "uid": "payment-business-metrics",
       "version": 1
     }
+  cost-optimization.json: |
+    {
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": null,
+      "links": [],
+      "panels": [
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "yellow", "value": 50},
+                  {"color": "red", "value": 80}
+                ]
+              },
+              "unit": "percent"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+          "id": 1,
+          "options": {
+            "orientation": "auto",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "showUnfilled": true
+          },
+          "pluginVersion": "10.0.0",
+          "targets": [{
+            "expr": "process_cpu_usage{namespace=\"ecommerce-dev\"} * 100",
+            "format": "time_series",
+            "legendFormat": "{{pod}}",
+            "refId": "A"
+          }],
+          "title": "Utilización de CPU por Pod (%)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "yellow", "value": 256},
+                  {"color": "red", "value": 512}
+                ]
+              },
+              "unit": "mbytes"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+          "id": 2,
+          "options": {
+            "orientation": "auto",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "showUnfilled": true
+          },
+          "pluginVersion": "10.0.0",
+          "targets": [{
+            "expr": "sum(jvm_memory_used_bytes{namespace=\"ecommerce-dev\"}) by (pod) / 1024 / 1024",
+            "format": "time_series",
+            "legendFormat": "{{pod}}",
+            "refId": "A"
+          }],
+          "title": "Memoria Usada por Pod (MB)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "mappings": [],
+              "unit": "short"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+          "id": 3,
+          "options": {
+            "legend": {"calcs": ["last"], "displayMode": "table", "placement": "bottom"},
+            "pieType": "pie",
+            "tooltip": {"mode": "single"}
+          },
+          "pluginVersion": "10.0.0",
+          "targets": [{
+            "expr": "process_cpu_usage{namespace=\"ecommerce-dev\"}",
+            "format": "time_series",
+            "legendFormat": "{{pod}}",
+            "refId": "A"
+          }],
+          "title": "Distribución de CPU por Servicio",
+          "type": "piechart"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "mappings": [],
+              "unit": "bytes"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+          "id": 4,
+          "options": {
+            "legend": {"calcs": ["last"], "displayMode": "table", "placement": "bottom"},
+            "pieType": "pie",
+            "tooltip": {"mode": "single"}
+          },
+          "pluginVersion": "10.0.0",
+          "targets": [{
+            "expr": "sum(jvm_memory_used_bytes{namespace=\"ecommerce-dev\"}) by (pod)",
+            "format": "time_series",
+            "legendFormat": "{{pod}}",
+            "refId": "A"
+          }],
+          "title": "Distribución de Memoria por Servicio",
+          "type": "piechart"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "yellow", "value": 0.5},
+                  {"color": "red", "value": 0.8}
+                ]
+              },
+              "unit": "short"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16},
+          "id": 5,
+          "options": {
+            "orientation": "auto",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "showUnfilled": true
+          },
+          "pluginVersion": "10.0.0",
+          "targets": [{
+            "expr": "count(count by (pod) (jvm_memory_used_bytes{namespace=\"ecommerce-dev\"}))",
+            "format": "time_series",
+            "legendFormat": "Total Pods Activos",
+            "refId": "A"
+          }],
+          "title": "Total de Pods Activos",
+          "type": "stat"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "red", "value": null},
+                  {"color": "yellow", "value": 1},
+                  {"color": "green", "value": 2}
+                ]
+              },
+              "unit": "short"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16},
+          "id": 6,
+          "options": {
+            "orientation": "auto",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "showUnfilled": true
+          },
+          "pluginVersion": "10.0.0",
+          "targets": [{
+            "expr": "count(count by (pod) (jvm_memory_used_bytes{namespace=\"ecommerce-dev\"}))",
+            "format": "time_series",
+            "legendFormat": "Pods con Métricas",
+            "refId": "A"
+          }],
+          "title": "Pods con Métricas Disponibles",
+          "type": "stat"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "yellow", "value": 60},
+                  {"color": "red", "value": 80}
+                ]
+              },
+              "unit": "percent"
+            }
+          },
+          "gridPos": {"h": 8, "w": 24, "x": 0, "y": 24},
+          "id": 7,
+          "options": {
+            "legend": {"calcs": [], "displayMode": "table", "placement": "bottom"},
+            "tooltip": {"mode": "multi"}
+          },
+          "pluginVersion": "10.0.0",
+          "targets": [
+            {
+              "expr": "process_cpu_usage{namespace=\"ecommerce-dev\"} * 100",
+              "format": "time_series",
+              "legendFormat": "{{pod}} - CPU",
+              "refId": "A"
+            },
+            {
+              "expr": "sum(jvm_memory_used_bytes{namespace=\"ecommerce-dev\"}) by (pod) / 1024 / 1024",
+              "format": "time_series",
+              "legendFormat": "{{pod}} - Memoria (MB)",
+              "refId": "B"
+            }
+          ],
+          "title": "Eficiencia de Utilización de Recursos (CPU y Memoria)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "yellow", "value": 50},
+                  {"color": "red", "value": 100}
+                ]
+              },
+              "unit": "currencyUSD"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 32},
+          "id": 8,
+          "options": {
+            "orientation": "auto",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "showUnfilled": true
+          },
+          "pluginVersion": "10.0.0",
+          "targets": [{
+            "expr": "process_cpu_usage{namespace=\"ecommerce-dev\"} * 0.5 * 0.04 * 730",
+            "format": "time_series",
+            "legendFormat": "{{pod}} - Estimado Mensual",
+            "refId": "A"
+          }],
+          "title": "Costo Estimado Mensual por Servicio (USD) - Basado en CPU",
+          "type": "timeseries",
+          "description": "Estimación basada en uso de CPU. Precio base: $0.04/hora por CPU (Standard_B2s)"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "yellow", "value": 50},
+                  {"color": "red", "value": 100}
+                ]
+              },
+              "unit": "currencyUSD"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 32},
+          "id": 9,
+          "options": {
+            "orientation": "auto",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "showUnfilled": true
+          },
+          "pluginVersion": "10.0.0",
+          "targets": [{
+            "expr": "sum(jvm_memory_used_bytes{namespace=\"ecommerce-dev\"}) by (pod) / 1024 / 1024 / 1024 * 0.005 * 730",
+            "format": "time_series",
+            "legendFormat": "{{pod}} - Estimado Mensual",
+            "refId": "A"
+          }],
+          "title": "Costo Estimado Mensual por Servicio (USD) - Basado en Memoria",
+          "type": "timeseries",
+          "description": "Estimación basada en uso de memoria. Precio: $0.005/GB-hora"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "single"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null}
+                ]
+              },
+              "unit": "currencyUSD"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 40},
+          "id": 10,
+          "options": {
+            "orientation": "auto",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "showUnfilled": true
+          },
+          "pluginVersion": "10.0.0",
+          "targets": [{
+            "expr": "(sum(process_cpu_usage{namespace=\"ecommerce-dev\"}) * 0.5 * 0.04 + sum(jvm_memory_used_bytes{namespace=\"ecommerce-dev\"}) / 1024 / 1024 / 1024 * 0.005) * 730",
+            "format": "time_series",
+            "legendFormat": "Costo Total Estimado",
+            "refId": "A"
+          }],
+          "title": "Costo Total Estimado Mensual del Clúster (USD)",
+          "type": "stat"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "single"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null}
+                ]
+              },
+              "unit": "currencyUSD"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 40},
+          "id": 11,
+          "options": {
+            "orientation": "auto",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "showUnfilled": true
+          },
+          "pluginVersion": "10.0.0",
+          "targets": [{
+            "expr": "(sum(process_cpu_usage{namespace=\"ecommerce-dev\"}) * 0.5 * 0.04 + sum(jvm_memory_used_bytes{namespace=\"ecommerce-dev\"}) / 1024 / 1024 / 1024 * 0.005) * 730 * 0.7",
+            "format": "time_series",
+            "legendFormat": "Ahorro Potencial con Spot",
+            "refId": "A"
+          }],
+          "title": "Ahorro Potencial Mensual con Spot Instances (USD)",
+          "type": "stat",
+          "description": "Estimación de ahorro si el 70% de la carga se ejecuta en spot instances"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "mappings": [],
+              "unit": "currencyUSD"
+            }
+          },
+          "gridPos": {"h": 8, "w": 24, "x": 0, "y": 48},
+          "id": 12,
+          "options": {
+            "legend": {"calcs": ["last"], "displayMode": "table", "placement": "bottom"},
+            "pieType": "pie",
+            "tooltip": {"mode": "single"}
+          },
+          "pluginVersion": "10.0.0",
+          "targets": [{
+            "expr": "(sum(process_cpu_usage{namespace=\"ecommerce-dev\"}) by (pod) * 0.5 * 0.04 + sum(jvm_memory_used_bytes{namespace=\"ecommerce-dev\"}) by (pod) / 1024 / 1024 / 1024 * 0.005) * 730",
+            "format": "time_series",
+            "legendFormat": "{{pod}}",
+            "refId": "A"
+          }],
+          "title": "Distribución de Costos Estimados por Servicio (USD/mes)",
+          "type": "piechart"
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "yellow", "value": 0.5},
+                  {"color": "red", "value": 0.8}
+                ]
+              },
+              "unit": "currencyUSD"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 56},
+          "id": 13,
+          "options": {
+            "orientation": "auto",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "showUnfilled": true
+          },
+          "pluginVersion": "10.0.0",
+          "targets": [{
+            "expr": "(sum(process_cpu_usage{namespace=\"ecommerce-dev\"}) * 0.5 * 0.04 + sum(jvm_memory_used_bytes{namespace=\"ecommerce-dev\"}) / 1024 / 1024 / 1024 * 0.005) * 730",
+            "format": "time_series",
+            "legendFormat": "Costo Total por Todos los Pods",
+            "refId": "A"
+          }],
+          "title": "Costo Total Estimado por Todos los Pods (USD/mes)",
+          "type": "stat",
+          "description": "Costo total estimado de todos los pods activos basado en uso real (CPU + memoria). Debe coincidir con 'Costo Total Estimado del Clúster'."
+        },
+        {
+          "datasource": "Prometheus",
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "red", "value": null},
+                  {"color": "yellow", "value": 30},
+                  {"color": "green", "value": 50}
+                ]
+              },
+              "unit": "percent"
+            }
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 56},
+          "id": 14,
+          "options": {
+            "orientation": "auto",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "showUnfilled": true
+          },
+          "pluginVersion": "10.0.0",
+          "targets": [{
+            "expr": "avg(process_cpu_usage{namespace=\"ecommerce-dev\"}) * 100",
+            "format": "time_series",
+            "legendFormat": "Eficiencia Global",
+            "refId": "A"
+          }],
+          "title": "Eficiencia Global de Utilización de CPU (%)",
+          "type": "stat",
+          "description": "Porcentaje de CPU utilizada vs. asignada. Objetivo: 60-80%"
+        }
+      ],
+      "refresh": "30s",
+      "schemaVersion": 27,
+      "style": "dark",
+      "tags": ["ecommerce", "finops", "cost-optimization"],
+      "templating": {"list": []},
+      "time": {"from": "now-6h", "to": "now"},
+      "timepicker": {},
+      "timezone": "",
+      "title": "FinOps - Optimización de Costos y Utilización",
+      "uid": "finops-cost-optimization",
+      "version": 1
+    }
 
