@@ -16,6 +16,7 @@ spec:
         prometheus.io/path: /order-service/actuator/prometheus
         prometheus.io/port: "8300"
     spec:
+      serviceAccountName: order-service
       containers:
       - name: order-service
         image: selimhorri/order-service-ecommerce-boot:0.1.0

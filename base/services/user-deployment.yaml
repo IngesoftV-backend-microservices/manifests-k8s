@@ -16,6 +16,7 @@ spec:
         prometheus.io/path: /user-service/actuator/prometheus
         prometheus.io/port: "8700"
     spec:
+      serviceAccountName: user-service
       containers:
       - name: user-service
         image: selimhorri/user-service-ecommerce-boot:0.1.0
