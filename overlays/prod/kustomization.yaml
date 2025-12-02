@@ -68,9 +68,10 @@ images:
     newTag: prod
 
 # Production uses more replicas for HA
+# Note: Observability services (zipkin) reduced to 1 replica due to cluster resource constraints
 replicas:
   - name: zipkin
-    count: 2
+    count: 1  # Reduced from 2 - observability service, not critical for app functionality
   - name: service-discovery
     count: 2
   - name: cloud-config
@@ -98,3 +99,4 @@ replicas:
 
 patchesStrategicMerge:
   - prometheus-rbac-patch.yaml
+  - rolling-update-strategy-patch.yaml
