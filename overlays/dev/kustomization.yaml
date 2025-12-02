@@ -95,4 +95,3 @@ replicas:
 
 patchesStrategicMerge:
   - prometheus-rbac-patch.yaml
-  - spot-instance-patch.yaml
